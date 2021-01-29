@@ -1,5 +1,6 @@
 import socket
 import sys
+import json
 
 class Client():
 
@@ -8,6 +9,20 @@ class Client():
 
     def inputUsername(self):
         self.username = input("Please enter your username: ")
+
+    def sendUsername(self):
+        '''
+        Register the username entered by the user with the server
+        '''
+        message = json.dumps({"newPlayer": self.username})
+        encodedMessage = message.encode()
+        self.server_socket.send(encodedMessage)
+        serverResponse = json.load(self.server_socket.recv(10000).decode())
+        if serverResponse["msgStatus"] == "200":
+            print("Welcome to 5-in-a-Row %s", serverResponse)
+        else:
+            self.server_socket.close()
+            sys.exit()
 
     def connectionInitialisation(self):
         host= '127.0.0.1'
@@ -44,4 +59,4 @@ class Client():
             sys.exit()
 
 if __name__ == "__main__":
-    Client.runClient()
+    Client().runClient()
