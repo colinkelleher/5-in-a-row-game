@@ -25,9 +25,16 @@ class Client():
         except socket.error:
             sys.exit()
 
-    def printBoard(self):
-        sys.exit()
+    def printBoard(self,grid,disc):
+        for row in grid:
+            print(" ".join(row))
+        print("Please enter a number between 1-9 to place a %s", disc)
 
+    def userMove(self,grid,disc):
+        userInputtedVal = False
+        self.printBoard(grid,disc)
+        while not userInputtedVal :
+            userInput = input("Enter Column: ")
 
     def runClient(self):
         try:
