@@ -1,5 +1,5 @@
 #==============================================
-# Testing grid creation
+# Testing grid creation and printing
 rows = 6
 columns = 9
 grid = []
