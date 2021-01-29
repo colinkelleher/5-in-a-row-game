@@ -4,6 +4,17 @@ import socket
 
 class Server():
 
+    def __init__(self, kwargs={}):
+        self.serverSetup(kwargs)
+
+    def serverSetup(self, kwargs={}):
+        self.players = kwargs.get("players", [])
+        self.columns = kwargs.get("columns", 9)
+        self.rows = kwargs.get("rows", 6)
+        self.grid = kwargs.get("grid",[])
+
+
+
     def connectionInitialisation(self):
         host= '127.0.0.1'
         port= 1234
