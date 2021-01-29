@@ -2,6 +2,7 @@ import socket
 import sys
 
 class Client():
+
     def __init__(self, username=''):
         self.username = username
 
@@ -24,3 +25,16 @@ class Client():
         except socket.error:
             sys.exit()
 
+    def printBoard(self):
+        sys.exit()
+
+
+    def runClient(self):
+        try:
+            self.inputUsername()
+            self.connectionInitialisation()
+        except:
+            sys.exit()
+
+if __name__ == "__main__":
+    Client.runClient()
