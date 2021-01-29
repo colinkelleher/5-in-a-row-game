@@ -13,7 +13,9 @@ class Server():
         self.rows = kwargs.get("rows", 6)
         self.grid = kwargs.get("grid",[])
 
-
+    def createBoard(self):
+        for number in range(self.rows):
+            self.grid.append(["[ ]"] * self.columns)
 
     def connectionInitialisation(self):
         host= '127.0.0.1'
