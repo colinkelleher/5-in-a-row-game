@@ -12,6 +12,7 @@ class Server():
         self.columns = kwargs.get("columns", 9)
         self.rows = kwargs.get("rows", 6)
         self.grid = kwargs.get("grid",[])
+        self.disc = kwargs.get("disc", {})
 
     def createBoard(self):
         for number in range(self.rows):
