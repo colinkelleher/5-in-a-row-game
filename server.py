@@ -72,6 +72,15 @@ class Server():
     def playerConnection(self):
         sys.exit()
 
+    def disconnectPlayers(self):
+        for player in self.players:
+            try:
+                self.players.remove(player)
+                response = json.dumps({"status": "DISCONNECT"})
+                self.players[player].send(response.encode())
+            except:
+                sys.exit()
+
     def connectionInitialisation(self):
         host= '127.0.0.1'
         port= 1234
