@@ -14,7 +14,7 @@ class Client():
         '''
         Register the username entered by the user with the server
         '''
-        message = json.dumps({"newPlayer": self.username})
+        message = json.dumps({"Player": self.username})
         encodedMessage = message.encode()
         self.server_socket.send(encodedMessage)
         serverResponse = json.load(self.server_socket.recv(10000).decode())
@@ -40,16 +40,26 @@ class Client():
         except socket.error:
             sys.exit()
 
-    def printBoard(self,grid,disc):
+    def printGrid(self,grid,disc):
         for row in grid:
-            print(" ".join(row))
+            return (" ".join(row))
         print("Please enter a number between 1-9 to place a %s", disc)
+
+    def isGameOver(self,response):
+        sys.exit()
+
 
     def userMove(self,grid,disc):
         userInputtedVal = False
-        self.printBoard(grid,disc)
+        self.printGrid(grid,disc)
         while not userInputtedVal :
             userInput = input("Enter Column: ")
+
+    def gameBody(self):
+        while True:
+            receivedData = self.server_socket.recv(5000).decode()
+            self.response=json.loads(receivedData)
+            self.isGameOver(self.response)
 
     def runClient(self):
         try:
