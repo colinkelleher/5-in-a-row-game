@@ -27,7 +27,7 @@ class Server():
         else:
             return False
 
-    def createBoard(self):
+    def createGrid(self):
         for number in range(self.rows):
             self.grid.append(["[ ]"] * self.columns)
 
