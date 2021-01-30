@@ -62,6 +62,12 @@ class Server():
     def placeDisc(self, position):
         position = position - 1
         gridPosition = False
+        for index in range(self.columns -1, -1, -1):
+            if self.grid[index][position] == "[ ]" and not gridPosition:
+                self.grid[index][position] = f"[{self.disc[self.playerGo]}]"
+                gridPosition = True
+
+
 
         sys.exit()
 
