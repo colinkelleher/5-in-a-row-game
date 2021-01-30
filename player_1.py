@@ -63,6 +63,14 @@ class Client():
         self.printGrid(grid,disc)
         while not userInputtedVal :
             userInput = input("Enter Column: ")
+            message = json.dumps({"Player": self.username, "nextPosition": userInput})
+            self.server_socket.send(message.encode())
+            self.response = json.loads(self.server_socket.recv(5000).decode())
+
+            self.isGameOver(self.response)
+            if self.response["status"] == "DISCONNECT":
+                self.server_socket.close()
+                sys.exit()
 
     def gameBody(self):
         while True:
