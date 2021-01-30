@@ -63,8 +63,16 @@ class Client():
 
     def runClient(self):
         try:
+            # get user to input their name
             self.inputUsername()
+            # establish connection with server
             self.connectionInitialisation()
+            # send username to server
+            self.sendUsername()
+            # play game
+            self.gameBody()
+            # exit once win/loose
+            self.gracefulExit()
         except:
             sys.exit()
 
