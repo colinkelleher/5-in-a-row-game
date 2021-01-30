@@ -49,6 +49,15 @@ class Client():
         sys.exit()
 
 
+    def gracefulExit(self):
+        try:
+            message = json.dumps({"Player": self.username, "nextPosition": "exit" })
+            self.server_socket.send(message.encode())
+            self.server_socket.close()
+            sys.exit()
+        except:
+            sys.exit()
+
     def userMove(self,grid,disc):
         userInputtedVal = False
         self.printGrid(grid,disc)
