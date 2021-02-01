@@ -68,15 +68,36 @@ class Server():
                 self.grid[index][position] = f"[{self.disc[self.playerGo]}]"
                 gridPosition = True
 
+        # Win / Loss
         if self.isWinner():
             winResponse = json.dumps({"msgStatus": "WIN"})
             self.players[self.playerGo].send(winResponse.encode())
             lossReponse = json.dumps({"msgStatus": "LOSS"})
             self.playerGo[self.playerWaiting].send(lossReponse.encode())
 
+        # Draw
+        if self.isDraw():
+            response = json.dumps({"msgStatus": "DRAW"})
+            self.players[self.playerGo].send(response.encode())
+            self.players[self.playerWaiting].send(response.encode())
+
+        # A COLUMN MUST BE FULL
+
+        if not gridPosition:
+            self.fullCol = True
+            response = json.dumps({"msgStatus": "FULLCOL"})
+            self.players[self.playerGo].send(response.encode())
+
         #sys.exit()
 
+    def isDraw(self):
+        if "[ ]" not in self.grid[0]:
+            if not self.isWinner():
+                return True
+        return False
+
     def isWinner(self):
+        sys.exit()
 
     def connectToPlayers(self, playerConnection):
         sys.exit()
