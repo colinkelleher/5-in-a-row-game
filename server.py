@@ -1,6 +1,7 @@
 import sys
 import socket
 import threading
+import time
 from threading import *
 import json
 
@@ -13,6 +14,7 @@ class Server():
     def serverSetup(self, kwargs={}):
         self.players = kwargs.get("players", [])
         self.columns = kwargs.get("columns", 9)
+        self.gameHasStarted = kwargs.get("gameHasStarted", False)
         self.fullCol = False
         self.rows = kwargs.get("rows", 6)
         self.grid = kwargs.get("grid",[])
@@ -100,10 +102,41 @@ class Server():
         sys.exit()
 
     def connectToPlayers(self, playerConnection):
+        while True:
+            connect = playerConnection.recv(5000).decode()
+            if not connect:
+                break
+            connect - json.loads(connect)
+            # Allows us to see which players go it currently is
+            if "currentPlayer" in connect.keys():
+                self.currentPlayer = connect["currentPlayer"]
+
+            if "newPlayer" in connect.keys():
+                self.currentPlayer = connect["newPlayer"]
+                if self.newPlayer(connect["newPlater"]):
+                    response = json.dumps({"msgStatus": "JOIN"})
+                    playerConnection.send(response.encode())
+                    self.lock.acquire()
+                    self.players[self.currentPlayer] = playerConnection
+                    self.lock.release()
+                    while len(self.players) == 1:
+                        response = json.dumps({"msgStatus": "playerJoining"})
+                        playerConnection.send(response.encode())
+                        time.sleep(3)
+                    if len(self.players) == 2 and not self.gameHasStarted:
+                        self.playerGo = self.players[0]
+                        self.disc[self.players[0]] = 'X'
+                        self.playerWaiting = self.players[1]
+                        self.disc[self.players[1]] = 'O'
+                        self.createGrid()
+                        self.getPlayerMove()
+                        self.gameHasStarted = True
+                    else:
+                        response = json.dumps({"msgStatus": "FULL"})
+                        playerConnection.send(response.encode())
+
         sys.exit()
 
-    def playerConnection(self):
-        sys.exit()
 
     def disconnectPlayers(self):
         for player in self.players:
@@ -129,9 +162,13 @@ class Server():
             sys.exit()
         self.client_socket.listen(5)
 
-    def runServer(self):
-        self.serverSetup()
 
+    def runServer(self):
+        self.connectionInitialisation()
+        while True:
+            conn, addr = self.client_socket.accept()
+            clientThread = threading.Thread(target=self.connectToPlayers,args=(conn,))
+            clientThread.start()
 
 if __name__ == "__main__":
     Server().runServer()
