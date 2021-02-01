@@ -13,6 +13,7 @@ class Server():
     def serverSetup(self, kwargs={}):
         self.players = kwargs.get("players", [])
         self.columns = kwargs.get("columns", 9)
+        self.fullCol = False
         self.rows = kwargs.get("rows", 6)
         self.grid = kwargs.get("grid",[])
         self.disc = kwargs.get("disc", {})
@@ -67,10 +68,15 @@ class Server():
                 self.grid[index][position] = f"[{self.disc[self.playerGo]}]"
                 gridPosition = True
 
+        if self.isWinner():
+            winResponse = json.dumps({"msgStatus": "WIN"})
+            self.players[self.playerGo].send(winResponse.encode())
+            lossReponse = json.dumps({"msgStatus": "LOSS"})
+            self.playerGo[self.playerWaiting].send(lossReponse.encode())
 
+        #sys.exit()
 
-        sys.exit()
-
+    def isWinner(self):
 
     def connectToPlayers(self, playerConnection):
         sys.exit()
@@ -82,7 +88,7 @@ class Server():
         for player in self.players:
             try:
                 self.players.remove(player)
-                response = json.dumps({"status": "DISCONNECT"})
+                response = json.dumps({"msgStatus": "DISCONNECT"})
                 self.players[player].send(response.encode())
             except:
                 sys.exit()
