@@ -45,9 +45,23 @@ class Client():
             return (" ".join(row))
         print("Please enter a number between 1-9 to place a %s", disc)
 
-    def isGameOver(self,response):
-        sys.exit()
 
+    def isGameOver(self,response):
+        if response["msgStatus"] == "DISCONNECT" :
+            print("Error. Game has disconnected")
+            sys.exit()
+
+        if response["msgStatus"] == "DRAW":
+            print("This game has finished in a draw. ")
+            sys.exit()
+
+        if response["msgStatus"] == "LOSS":
+            print("Sorry %s, you have lost :(" % self.username)
+            sys.exit()
+
+        if response["msgStatus"] == "WIN":
+            print("Congratulations %s, you have WON!! :(" % self.username)
+            sys.exit()
 
     def gracefulExit(self):
         try:
@@ -68,7 +82,7 @@ class Client():
             self.response = json.loads(self.server_socket.recv(5000).decode())
 
             self.isGameOver(self.response)
-            if self.response["status"] == "DISCONNECT":
+            if self.response["msgStatus"] == "DISCONNECT":
                 self.server_socket.close()
                 sys.exit()
 
