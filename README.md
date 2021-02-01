@@ -13,3 +13,8 @@
 ### Colin's Notes
 
 ### How to run the game
+
+1. Run your server -> 'python3 server.py'
+2. Run player1 -> 'python3 player1.py' and enter your name as prompted
+3. Run player2 -> 'python3 player2.py' and enter your name as prompted
+Game is now running!
