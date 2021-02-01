@@ -27,13 +27,11 @@ class Client():
     def connectionInitialisation(self):
         host= '127.0.0.1'
         port= 1234
-
         # Socket object creation
         try:
             self.server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         except socket.error:
             sys.exit()
-
         # Connection to port
         try:
             self.server_socket.connect((host, port))
@@ -71,6 +69,26 @@ class Client():
             sys.exit()
         except:
             sys.exit()
+
+    def game(self):
+        while True:
+            self.response=json.loads(self.server_socket.recv(5000).decode())
+            self.isGameOver(self.response)
+            while self.response["msgStatus"] == "playerJoining":
+                print("Waiting for another player to join....")
+                self.response=json.loads(self.server_socket.recv(5000).decode())
+
+            if self.response['msgStatus'] == "WAIT":
+                print("It is your opponent's turn. Please Wait!")
+
+            if self.response["msgStatus"] == "READY":
+                if ("grid" in self.response.keys() and "disc" in self.response.keys()):
+                    grid = self.response["grid"]
+                    disc = self.response["disc"]
+                    self.userMove(grid, disc)
+                if self.response['msgStatus'] == "WAIT":
+                    print("It is your opponent's turn. Please Wait!")
+
 
     def userMove(self,grid,disc):
         userInputtedVal = False
