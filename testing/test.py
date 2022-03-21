@@ -56,11 +56,11 @@ class testResults(unittest.TestCase):
             }
         self.assertFalse(server.isDraw == False)
 
-class ClientTests(unittest.TestCase):
-    def test_username(self):
-        client = Client()
-        username = client.inputUsername()
-        self.assertFalse(username== "jk")
+# class ClientTests(unittest.TestCase):
+#     def test_username(self):
+#         client = Client()
+#         username = client.inputUsername()
+#         self.assertFalse(username== "jk")
 
 
 if __name__ == '__main__':
